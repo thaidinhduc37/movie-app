@@ -18,10 +18,12 @@ const cx = classNames.bind(styles);
 
 function Watch() {
     const { slug } = useParams();
+    const [newSlug, setNewSlug] = useState(slug.replace(/-tap.*/, ''));
     const [data, setData] = useState([]); // State để lưu dữ liệu từ API
     const [episodes, setEpisodes] = useState([]); // State để lưu tập phim
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [error, setError] = useState(null); // Trạng thái lỗi nếu có
+    const [selectedEpisode, setSelectedEpisode] = useState([]);
 
     const [isAutoplayOn, setIsAutoplayOn] = useState(false);
 
@@ -33,10 +35,14 @@ function Watch() {
         setIsAutoplayOn((prevState) => !prevState);
     };
 
+    const handleEpisodeSelect = (episode) => {
+        setSelectedEpisode(episodes[episode]);
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://phimapi.com/phim/${slug}`);
+                const response = await axios.get(`https://phimapi.com/phim/${newSlug}`);
 
                 if (response.data) {
                     setData(response.data.movie);
@@ -53,7 +59,7 @@ function Watch() {
         };
 
         fetchData();
-    }, [slug]);
+    }, [newSlug]);
 
     if (loading) {
         return <div>Đang tải dữ liệu...</div>;
@@ -77,7 +83,7 @@ function Watch() {
                 </div>
                 <div className={cx('player')}>
                     <div className={cx('player-area')}>
-                        <MoviePlayer data={episodes} />
+                        <MoviePlayer data={selectedEpisode} />
                     </div>
                 </div>
                 <div className={cx('film-note')}>
@@ -157,7 +163,12 @@ function Watch() {
                         Danh sách tập phim
                     </span>
                     <ul className={cx('episodes-list')}>
-                        <EpisodesList className={cx('episodes-item')} data={episodes} slug={slug} />
+                        <EpisodesList
+                            onSelectEpisode={handleEpisodeSelect}
+                            className={cx('episodes-item')}
+                            data={episodes}
+                            slug={slug}
+                        />
                     </ul>
                 </div>
             </div>
@@ -180,8 +191,8 @@ function Watch() {
                 </p>
             </div>
             <div className={cx('comment')}>
-                        <h3>Khi nào có Bình luận sẽ thêm vào sau</h3>
-                    </div>
+                <h3>Khi nào có Bình luận sẽ thêm vào sau</h3>
+            </div>
             <div className={cx('film-related')}>
                 <MovieContainer
                     apis={[

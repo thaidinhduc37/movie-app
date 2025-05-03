@@ -1,11 +1,15 @@
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 
 import Button from '../Button';
 import styles from './EpisodesList.module.scss';
 
 const cx = classNames.bind(styles);
 
-function EpisodesList({ title, data, slug, className }) {
+function EpisodesList({ title, data, slug, className, onSelectEpisode }) {
+
+    const [newSlug, setNewSlug] = useState(slug.replace(/-tap.*/, ''));
+
     return (
         <div className={cx('episodes', className)}>
             <span>{title}</span>
@@ -16,7 +20,8 @@ function EpisodesList({ title, data, slug, className }) {
                         <Button
                             key={i}
                             className={cx('episodes-item')}
-                            to={`/watch/${slug}-${episode.slug}`}
+                            onClick={() => onSelectEpisode(i)}
+                            to={`/watch/${newSlug}-${episode.slug}`}
                             title={episode.name}
                         />
                     ))}

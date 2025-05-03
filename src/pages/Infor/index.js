@@ -98,7 +98,16 @@ function Infor() {
                             </ul>
                         </div>
                     </div>
-                    <EpisodesList title={'Tập mới nhất:'} data={episodes} slug={slug} />
+                    <div className={cx('episodes')}>
+                        <div className={cx('list-episodes')}>
+                            <EpisodesList
+                                title={'Tập mới nhất:'}
+                                data={episodes}
+                                slug={slug}
+                            />
+                        </div>
+                    </div>
+
                     <div className={cx('infor-text')}>
                         <Social />
                         <ul className={cx('entry-meta', 'block film')}>
@@ -188,17 +197,16 @@ function Infor() {
                         />
                     </div>
                     <div className={cx('film-related')}>
-                    <MovieContainer
-                        className={'small'}
-                        apis={[
-                            'https://phimapi.com/v1/api/tim-kiem?keyword=moi&limit=5',
-                            'https://phimapi.com/v1/api/tim-kiem?keyword=2024&limit=5',
-                        ]}
-                        displayType={'slider'}
-                        sliderTitle={'PHIM ĐỀ CỬ MỚI'}
-                    />
+                        <MovieContainer
+                            className={'small'}
+                            apis={[
+                                'https://phimapi.com/v1/api/tim-kiem?keyword=moi&limit=5',
+                                'https://phimapi.com/v1/api/tim-kiem?keyword=2024&limit=5',
+                            ]}
+                            displayType={'slider'}
+                            sliderTitle={'PHIM ĐỀ CỬ MỚI'}
+                        />
                     </div>
-                    
                 </div>
             </div>
         </div>
