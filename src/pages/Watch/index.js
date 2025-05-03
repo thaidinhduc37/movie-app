@@ -36,6 +36,7 @@ function Watch() {
 
     const handleEpisodeSelect = (episode) => {
         setSelectedEpisode(episodes[episode]);
+        
     };
 
     useEffect(() => {
@@ -44,6 +45,7 @@ function Watch() {
                 const response = await axios.get(`https://phimapi.com/phim/${slug.replace(/-tap.*/, '')}`);
 
                 if (response.data) {
+                    console.log(response.data);
                     setData(response.data.movie);
                     setEpisodes(response.data.episodes[0]?.server_data || []);
                 } else {

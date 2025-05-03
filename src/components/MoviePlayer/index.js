@@ -9,30 +9,36 @@ function MoviePlayer({ data }) {
     const videoRef = useRef(null);
 
     useEffect(() => {
-        if (data && data.length > 0 && data[0].link_m3u8) {
-            const video = videoRef.current;
+        const video = videoRef.current;
+        let hls;
 
+        if (data && data.link_m3u8 && video) {
             if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(data[0].link_m3u8);
+                hls = new Hls();
+                hls.loadSource(data.link_m3u8);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.muted = true;
                     video.play();
                 });
-                return () => {
-                    hls.destroy();
-                };
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = data[0].link_m3u8;
+                video.src = data.link_m3u8;
+                video.muted = true;
                 video.addEventListener('loadedmetadata', () => {
                     video.play();
                 });
             }
         }
+
+        return () => {
+            if (hls) {
+                hls.destroy();
+            }
+        };
     }, [data]);
 
     return (
-        <video ref={videoRef} id="my-hls-video" width="100%" controls>
+        <video ref={videoRef} id="my-hls-video" width="100%" controls muted>
             Trình duyệt của bạn không hỗ trợ phát video.
         </video>
     );
