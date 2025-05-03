@@ -18,7 +18,6 @@ const cx = classNames.bind(styles);
 
 function Watch() {
     const { slug } = useParams();
-    const [newSlug, setNewSlug] = useState(slug.replace(/-tap.*/, ''));
     const [data, setData] = useState([]); // State để lưu dữ liệu từ API
     const [episodes, setEpisodes] = useState([]); // State để lưu tập phim
     const [loading, setLoading] = useState(true); // Trạng thái loading
@@ -42,7 +41,7 @@ function Watch() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://phimapi.com/phim/${newSlug}`);
+                const response = await axios.get(`https://phimapi.com/phim/${slug.replace(/-tap.*/, '')}`);
 
                 if (response.data) {
                     setData(response.data.movie);
@@ -59,7 +58,7 @@ function Watch() {
         };
 
         fetchData();
-    }, [newSlug]);
+    }, [slug]);
 
     if (loading) {
         return <div>Đang tải dữ liệu...</div>;
